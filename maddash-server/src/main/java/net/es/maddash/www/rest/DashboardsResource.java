@@ -11,7 +11,7 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.log4j.Logger;
 
 import net.es.maddash.MaDDashGlobals;
-import net.es.maddash.NetLogger;
+import net.es.maddash.logging.NetLogger;
 import net.sf.json.JSONObject;
 
 @Path("/maddash/dashboards")

@@ -5,6 +5,8 @@ import java.util.Arrays;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
+import net.es.maddash.logging.NetLogger;
+
 import org.apache.log4j.Logger;
 
 /**

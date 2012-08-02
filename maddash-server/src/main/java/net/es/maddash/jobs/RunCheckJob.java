@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import net.es.maddash.MaDDashGlobals;
-import net.es.maddash.NetLogger;
+import net.es.maddash.logging.NetLogger;
 import net.es.maddash.checks.Check;
 import net.es.maddash.checks.CheckConstants;
 import net.es.maddash.checks.CheckResult;
@@ -27,7 +27,7 @@ import org.quartz.JobExecutionException;
  *
  */
 public class RunCheckJob implements Job{
-    private Logger log = Logger.getLogger(CheckSchedulerJob.class);
+    private Logger log = Logger.getLogger(RunCheckJob.class);
     private Logger netlogger = Logger.getLogger("netlogger");
     
     public void execute(JobExecutionContext context) throws JobExecutionException {

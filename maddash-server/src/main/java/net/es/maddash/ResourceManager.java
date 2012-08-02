@@ -16,6 +16,7 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.log4j.Logger;
 
 import net.es.maddash.checks.CheckConstants;
+import net.es.maddash.logging.NetLogger;
 import net.es.maddash.utils.URIUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;

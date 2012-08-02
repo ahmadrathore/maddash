@@ -33,9 +33,9 @@
   <dependencies>
     <!-- netlogger -->
     <dependency>
-        <artifactId>netlogger</artifactId>
-        <groupId>gov.lbl</groupId>
-        <version>4.1.2</version>
+        <artifactId>maddash-utils</artifactId>
+        <groupId>net.es.maddash</groupId>
+        <version>1.0</version>
     </dependency>
     
     <!-- command-line parsing -->

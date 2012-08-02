@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import net.es.maddash.MaDDashGlobals;
-import net.es.maddash.NetLogger;
+import net.es.maddash.logging.NetLogger;
 
 import org.apache.log4j.Logger;
 import org.quartz.JobDataMap;
