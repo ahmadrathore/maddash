@@ -41,7 +41,7 @@ import net.sf.json.JSONObject;
 public class PSNagiosCheck extends NagiosCheck implements Check {
     private Logger log = Logger.getLogger(NagiosCheck.class);
     private Logger netlogger = Logger.getLogger("netlogger");
-    
+
     static HashMap<String, String> eventTypes = new  HashMap<String, String>();
     static{
         eventTypes.put("%event.delayBuckets", "http://ggf.org/ns/nmwg/characteristic/delay/summary/20110317");
@@ -50,22 +50,23 @@ public class PSNagiosCheck extends NagiosCheck implements Check {
         eventTypes.put("%event.iperf", "http://ggf.org/ns/nmwg/tools/iperf/2.0");
         eventTypes.put("%event.utilization", "http://ggf.org/ns/nmwg/characteristic/utilization/2.0");
     }
-    
+
     private final String PARAM_MD_KEY_LOOKUP = "metaDataKeyLookup";
     private final String PARAM_GRAPH_URL = "graphUrl";
     private final String PARAM_MAURL = "maUrl";
-    
+    private final String PROP_MAURL_DEFAULT = "default";
+
     public CheckResult check(String gridName, String rowName, String colName,
             Map params, int timeout) {
         HashMap<String, String> netLogParams = new HashMap<String, String>();
         NetLogger netLog = NetLogger.getTlogger();
-        
+
         //initialize replacement vars
         HashMap<String, String> vars = new HashMap<String, String>();
         vars.put("%row", rowName);
         vars.put("%col", colName);
         vars.putAll(eventTypes);
-        
+
         //get MA URL
         if(!params.containsKey(PARAM_MAURL) || params.get(PARAM_MAURL) == null){
             return new CheckResult(CheckConstants.RESULT_UNKNOWN, 
@@ -74,17 +75,26 @@ public class PSNagiosCheck extends NagiosCheck implements Check {
         Map maUrlMap = (Map)params.get(PARAM_MAURL);
         String maUrl = null;
         if(maUrlMap.containsKey(rowName) && maUrlMap.get(rowName) != null){
-            maUrl = (String) maUrlMap.get(rowName);
-        }else{
-            maUrl = (String) maUrlMap.get("default");
+            Map<String,String> rowMaUrlMap = (Map<String,String>) maUrlMap.get(rowName);
+            if(rowMaUrlMap.containsKey(colName) && rowMaUrlMap.get(colName) != null){
+                maUrl = (String) rowMaUrlMap.get(colName);
+            }else if(rowMaUrlMap.containsKey(PROP_MAURL_DEFAULT) && rowMaUrlMap.get(PROP_MAURL_DEFAULT) != null){
+                maUrl = (String) rowMaUrlMap.get(PROP_MAURL_DEFAULT);
+            }
         }
+        //try to set default
+        if(maUrl == null){
+            maUrl = (String) maUrlMap.get(PROP_MAURL_DEFAULT);
+        }
+        //if still not set then throw error
         if(maUrl == null){
             return new CheckResult(CheckConstants.RESULT_UNKNOWN, 
-                     "Default MA URL not defined. Please check config file", null);
+                    "Default MA URL not defined. Please check config file", null);
         }
+
         maUrl = this.replaceVars(maUrl, vars);
         vars.put("%maUrl", maUrl);
-        
+
         //get metadata key lookup URL
         if(!params.containsKey(PARAM_MD_KEY_LOOKUP) || params.get(PARAM_MD_KEY_LOOKUP) == null){
             return new CheckResult(CheckConstants.RESULT_UNKNOWN, 
@@ -92,14 +102,14 @@ public class PSNagiosCheck extends NagiosCheck implements Check {
         }
         String mdKeyLookupUrl = (String)params.get(PARAM_MD_KEY_LOOKUP);
         mdKeyLookupUrl = this.replaceVars(mdKeyLookupUrl, vars);
-        
+
         //get graph url
         if(!params.containsKey(PARAM_GRAPH_URL) || params.get(PARAM_GRAPH_URL) == null){
             return new CheckResult(CheckConstants.RESULT_UNKNOWN, 
                     PARAM_GRAPH_URL + " not defined. Please check config file", null);
         }
         String graphUrl = (String)params.get(PARAM_GRAPH_URL);
-        
+
         //replace maUrl in command
         if(!params.containsKey(PARAM_COMMAND) || params.get(PARAM_COMMAND) == null){
             return new CheckResult(CheckConstants.RESULT_UNKNOWN, 
@@ -108,7 +118,7 @@ public class PSNagiosCheck extends NagiosCheck implements Check {
         String command = (String)params.get(PARAM_COMMAND);
         command = this.replaceVars(command, vars);
         params.put(PARAM_COMMAND, command);
-        
+
         //run command
         //CheckResult nagiosResult = super.check(gridName, rowName, colName, params, timeout);
         CheckResult nagiosResult = super.check(params, timeout);
@@ -116,7 +126,7 @@ public class PSNagiosCheck extends NagiosCheck implements Check {
             nagiosResult.setStats(new HashMap<String, String>());
         }
         nagiosResult.getStats().put("maUrl", maUrl);
-        
+
         //get MA key
         String response = "";
         try{
@@ -138,7 +148,7 @@ public class PSNagiosCheck extends NagiosCheck implements Check {
             }
             netlogger.debug(netLog.end("maddash.PSNagiosCheck.getMdKey", null, mdKeyLookupUrl, netLogParams));
             log.debug("Response: " + response);
-            
+
             //load response into check result
             JSONObject responseJSON = JSONObject.fromObject(response);
             //make sure not to replace longer vars with shorter (i.e. dst and dstIP)
@@ -156,7 +166,7 @@ public class PSNagiosCheck extends NagiosCheck implements Check {
             log.error("Error getting metadata key: " + e.getMessage());
             e.printStackTrace();
         }
-        
+
         return nagiosResult;
     }
 
