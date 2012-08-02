@@ -60,7 +60,7 @@ install -m 755 %{package_name}/bin/* %{buildroot}/%{install_base}/bin/
 install -m 755 %{package_name}/scripts/%{package_name} %{buildroot}/etc/init.d/%{package_name}
 
 # Copy default config file
-cp %{package_name}/etc/maddash.yaml %{buildroot}/%{config_base}/maddash.yaml
+cp %{package_name}/etc/maddash-collector.yaml %{buildroot}/%{config_base}/maddash-collector.yaml
 
 #Update log locations
 sed -e s,%{package_name}.log,%{log_dir}/%{package_name}.log, -e s,%{package_name}.netlogger.log,%{log_dir}/%{package_name}.netlogger.log, < %{package_name}/etc/log4j.properties > %{buildroot}/%{config_base}/log4j.properties
