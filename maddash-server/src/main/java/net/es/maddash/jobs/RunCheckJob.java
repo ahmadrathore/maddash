@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import net.es.maddash.MaDDashGlobals;
 import net.es.maddash.logging.NetLogger;
@@ -74,7 +75,8 @@ public class RunCheckJob implements Job{
         CheckResult result = null;
         try{
             netlogger.info(netLog.start("maddash.RunCheckJob.execute.runCheck", null, null, netLogFields));
-            result = checkToRun.check(gridName, rowName, colName, paramJson, timeout);
+            Map preparedParams = checkToRun.prepareFromYAML(gridName, rowName, colName, paramJson);
+            result = checkToRun.check(preparedParams, timeout);
             netLogFields.put("resultCode", result.getResultCode()+"");
             netLogFields.put("resultMsg", result.getMessage());
             netlogger.info(netLog.end("maddash.RunCheckJob.execute.runCheck", null, null, netLogFields));
