@@ -1,0 +1,107 @@
+##
+# Set the number of jobs that can run in parallel. Default is 50.
+#jobThreadPoolSize: 50
+
+##
+# Set number of jobs that can be in queue at one time. Default is 250.
+#jobBatchSize: 250
+
+##
+# The frequency to poll for new jobs in seconds
+#jobPollingInterval: 60
+
+##
+# A list of URLs where the collector should query for jobs
+jobSources:
+    - "http://127.0.0.1/maddash-test/jobs.json"
+
+
+##
+# Set the SSL file path and password to keystore containing public keys of trusted servers
+#sslKeystore: "/var/lib/maddash/maddash-collector/maddash.jks"
+#sslKeystorePassword: "changeit"
+
+##
+# Define new checks here. Maps the 'type' to the class and class-specific params
+#
+handlers:
+    - type: "nagios.ps.throughput"
+      class: "net.es.maddash.checks.NagiosCheck"
+      params:
+        command: "/opt/perfsonar_ps/nagios/bin/check_throughput.pl"
+        commandOpts:
+            - name: "url"
+              cmdOpt: "-u"  
+            - name: "source"
+              cmdOpt: "-s" 
+            - name: "destination"
+              cmdOpt: "-d" 
+            - name: "timeRange"
+              cmdOpt: "-r" 
+            - name: "warningThreshold"
+              cmdOpt: "-w" 
+            - name: "criticalThreshold"
+              cmdOpt: "-c" 
+    - type: "nagios.ps.owdelay"
+      class: "net.es.maddash.checks.NagiosCheck"
+      params:
+        command: "/opt/perfsonar_ps/nagios/bin/check_owdelay.pl"
+        commandOpts:
+            - name: "url"
+              cmdOpt: "-u"  
+            - name: "source"
+              cmdOpt: "-s" 
+            - name: "destination"
+              cmdOpt: "-d" 
+            - name: "timeRange"
+              cmdOpt: "-r" 
+            - name: "loss"
+              cmdOpt: "-l" 
+              switch: 1
+            - name: "warningThreshold"
+              cmdOpt: "-w" 
+            - name: "criticalThreshold"
+              cmdOpt: "-c" 
+    - type: "nagios.ps.traceroute"
+      class: "net.es.maddash.checks.NagiosCheck"
+      params:
+        command: "/opt/perfsonar_ps/nagios/bin/check_traceroute.pl"
+        commandOpts:
+            - name: "url"
+              cmdOpt: "-u"  
+            - name: "source"
+              cmdOpt: "-s" 
+            - name: "destination"
+              cmdOpt: "-d" 
+            - name: "timeRange"
+              cmdOpt: "-r" 
+            - name: "warningThreshold"
+              cmdOpt: "-w" 
+            - name: "criticalThreshold"
+              cmdOpt: "-c" 
+    - type: "nagios.ps.perfSONAR"
+      class: "net.es.maddash.checks.NagiosCheck"
+      params:
+        command: "/opt/perfsonar_ps/nagios/bin/check_perfSONAR.pl"
+        commandOpts:
+            - name: "url"
+              cmdOpt: "-u"  
+            - name: "template"
+              cmdOpt: "-t"  
+    - type: "nagios.ps.lookup"
+      class: "net.es.maddash.checks.NagiosCheck"
+      params:
+        command: "/opt/perfsonar_ps/nagios/bin/check_ls.pl"
+        commandOpts:
+            - name: "url"
+              cmdOpt: "-u"  
+    - type: "nagios.tcp"
+      class: "net.es.maddash.checks.NagiosCheck"
+      params:
+        command: "/opt/nagios/bin/check_tcp"
+        commandOpts:
+            - name: "host"
+              cmdOpt: "-H"
+            - name: "port"
+              cmdOpt: "-p"
+    

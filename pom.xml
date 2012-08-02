@@ -8,7 +8,9 @@
 
     <modules>
         <module>common-libs</module>
+        <module>maddash-utils</module>
         <module>maddash-server</module>
+        <module>maddash-collector</module>
     </modules>
     <build>
         <pluginManagement>
