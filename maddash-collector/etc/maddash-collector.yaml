@@ -13,12 +13,12 @@
 ##
 # A list of URLs where the collector should query for jobs
 jobSources:
-    - "http://127.0.0.1/maddash-test/jobs.json"
+    - "http://perfsonar.racf.bnl.gov:8080/dashboard-1.0-SNAPSHOT/jobs"
     
 ##
 # A list of URLs where the collector should store jobs
 resultStores:
-    - "http://127.0.0.1/maddash-test/result.html"
+    - "http://perfsonar.racf.bnl.gov:8080/dashboard-1.0-SNAPSHOT/results"
 
 
 ##
@@ -34,7 +34,7 @@ handlers:
       class: "net.es.maddash.checks.NagiosCheck"
       timeout: 60
       params:
-        command: "/Users/alake/Programming/Perl/perfSONAR/perfSONAR-PS/trunk/perfSONAR_PS-Nagios/bin/check_throughput.pl"
+        command: "/opt/perfsonar_ps/nagios/bin/check_throughput.pl"
         commandOpts:
             - name: "url"
               cmdOpt: "-u"  
@@ -52,7 +52,7 @@ handlers:
       class: "net.es.maddash.checks.NagiosCheck"
       timeout: 60
       params:
-        command: "/Users/alake/Programming/Perl/perfSONAR/perfSONAR-PS/trunk/perfSONAR_PS-Nagios/bin/check_owdelay.pl"
+        command: "/opt/perfsonar_ps/nagios/bin/check_owdelay.pl"
         commandOpts:
             - name: "url"
               cmdOpt: "-u"  
@@ -73,7 +73,7 @@ handlers:
       class: "net.es.maddash.checks.NagiosCheck"
       timeout: 60
       params:
-        command: "/Users/alake/Programming/Perl/perfSONAR/perfSONAR-PS/trunk/perfSONAR_PS-Nagios/bin/check_traceroute.pl"
+        command: "/opt/perfsonar_ps/nagios/bin/check_traceroute.pl"
         commandOpts:
             - name: "url"
               cmdOpt: "-u"  
@@ -91,17 +91,17 @@ handlers:
       class: "net.es.maddash.checks.NagiosCheck"
       timeout: 60
       params:
-        command: "/Users/alake/Programming/Perl/perfSONAR/perfSONAR-PS/trunk/perfSONAR_PS-Nagios/bin/check_perfSONAR.pl"
+        command: "/opt/perfsonar_ps/nagios/bin/check_perfSONAR.pl"
         commandOpts:
             - name: "url"
-              cmdOpt: "-u"  
+              cmdOpt: ""  
             - name: "template"
               cmdOpt: "-t"  
     - type: "nagios.ps.lookup"
       class: "net.es.maddash.checks.NagiosCheck"
       timeout: 60
       params:
-        command: "/Users/alake/Programming/Perl/perfSONAR/perfSONAR-PS/trunk/perfSONAR_PS-Nagios/bin/check_ls.pl"
+        command: "/opt/perfsonar_ps/nagios/bin/check_ls.pl"
         commandOpts:
             - name: "url"
               cmdOpt: "-u"  

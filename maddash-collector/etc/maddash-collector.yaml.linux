@@ -13,7 +13,12 @@
 ##
 # A list of URLs where the collector should query for jobs
 jobSources:
-    - "http://127.0.0.1/maddash-test/jobs.json"
+    - "http://perfsonar.racf.bnl.gov:8080/dashboard-1.0-SNAPSHOT/jobs"
+    
+##
+# A list of URLs where the collector should store jobs
+resultStores:
+    - "http://perfsonar.racf.bnl.gov:8080/dashboard-1.0-SNAPSHOT/results"
 
 
 ##
@@ -27,6 +32,7 @@ jobSources:
 handlers:
     - type: "nagios.ps.throughput"
       class: "net.es.maddash.checks.NagiosCheck"
+      timeout: 60
       params:
         command: "/opt/perfsonar_ps/nagios/bin/check_throughput.pl"
         commandOpts:
@@ -44,6 +50,7 @@ handlers:
               cmdOpt: "-c" 
     - type: "nagios.ps.owdelay"
       class: "net.es.maddash.checks.NagiosCheck"
+      timeout: 60
       params:
         command: "/opt/perfsonar_ps/nagios/bin/check_owdelay.pl"
         commandOpts:
@@ -64,6 +71,7 @@ handlers:
               cmdOpt: "-c" 
     - type: "nagios.ps.traceroute"
       class: "net.es.maddash.checks.NagiosCheck"
+      timeout: 60
       params:
         command: "/opt/perfsonar_ps/nagios/bin/check_traceroute.pl"
         commandOpts:
@@ -81,15 +89,17 @@ handlers:
               cmdOpt: "-c" 
     - type: "nagios.ps.perfSONAR"
       class: "net.es.maddash.checks.NagiosCheck"
+      timeout: 60
       params:
         command: "/opt/perfsonar_ps/nagios/bin/check_perfSONAR.pl"
         commandOpts:
             - name: "url"
-              cmdOpt: "-u"  
+              cmdOpt: ""  
             - name: "template"
               cmdOpt: "-t"  
     - type: "nagios.ps.lookup"
       class: "net.es.maddash.checks.NagiosCheck"
+      timeout: 60
       params:
         command: "/opt/perfsonar_ps/nagios/bin/check_ls.pl"
         commandOpts:
@@ -97,6 +107,7 @@ handlers:
               cmdOpt: "-u"  
     - type: "nagios.tcp"
       class: "net.es.maddash.checks.NagiosCheck"
+      timeout: 30
       params:
         command: "/opt/nagios/bin/check_tcp"
         commandOpts:
